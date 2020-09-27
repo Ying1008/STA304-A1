@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.75.1" />
+
+
+<title>Close contact and Outbreak associated is main cause for Toronto COVID-19 spreat - A Hugo website</title>
+<meta property="og:title" content="Close contact and Outbreak associated is main cause for Toronto COVID-19 spreat - A Hugo website">
+
+
+  <link href='../../../../favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="../../../../css/fonts.css" media="all">
+<link rel="stylesheet" href="../../../../css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="../../../../" class="nav-logo">
+    <img src="../../../../images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="../../../../about/">About</a></li>
+    
+    <li><a href="../../../../education/">Education</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">5 min read</span>
+    
+
+    <h1 class="article-title">Close contact and Outbreak associated is main cause for Toronto COVID-19 spreat</h1>
+
+    
+    <span class="article-date">2020-09-27</span>
+    
+
+    <div class="article-content">
+      
+
+
+<div id="abstruct" class="section level1">
+<h1>Abstruct</h1>
+</div>
+<div id="discribe-data" class="section level1">
+<h1>Discribe Data</h1>
+<p>This data set contains demographic, geographic, and severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020. This includes cases that are sporadic (occurring in the community) and outbreak-associated. The data are extracted from the provincial communicable disease reporting system (iPHIS) and Toronto’s custom COVID-19 case management system (CORES) and combined for reporting. Each line summarizes information for an individual case.
+The data will be completely refreshed and overwritten on a weekly basis.</p>
+</div>
+<div id="variables-used" class="section level1">
+<h1>Variables used</h1>
+<p>【Source of Infection】 - The most likely way that sporadic cases acquired their COVID-19 infection. Only the most likely exposure for each case is reported. Exposures that occurred up to 14 days before symptoms start are potential acquisition sources, and can include(
+#Travel:Travel outside of Ontario.
+#Close contact with a case: Was in close contact with a confirmed or probable COVID-19 case (e.g., reside in the same household).
+#Institutional setting: Institutional settings includes, but not limited to: long-term care homes, acute care hospitals…
+#Healthcare setting: includes, but not limited to: family physician, dentist, ophthalmologist, sports doctor.
+#Community: Cases with no reported travel outside of Ontario, no known close contact with a COVID-19 case.
+#Pending Information on source of infection pending.
+#Unknown/missing Source of infection not identified or missing.
+#N/A: Outbreak-associated cases.)
+【Episode Date】 - The episode date is a derived variable that best estimates when the disease was acquired, and refers to the earliest available date from: symptom onset (the first day that COVID-19 symptoms occurred), laboratory specimen collection date, or reported date.
+【Client Gender】 -Self-reported gender.</p>
+</div>
+<div id="picture1-analysis-of-fector-for-get-covid-19-of-different-age-groups" class="section level1">
+<h1>Picture1: Analysis of Fector for get COVID-19 of different age groups</h1>
+<ul>
+<li>Young people are more likely to get COVID-19 from close contact, while older people are more likely to be affected by outbreaks.</li>
+</ul>
+<pre class="r"><code>library(opendatatoronto)
+library(dplyr)
+## 
+## Attaching package: &#39;dplyr&#39;
+## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag
+## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union
+
+# get package
+package &lt;- show_package(&quot;64b54586-6180-4485-83eb-81e8fae3b8fe&quot;)
+package
+## # A tibble: 1 x 10
+##   title id    topics civic_issues excerpt dataset_category num_resources formats
+##   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;                    &lt;int&gt; &lt;chr&gt;  
+## 1 COVI… 64b5… &lt;NA&gt;   &lt;NA&gt;         &lt;NA&gt;    &lt;NA&gt;                         1 &lt;NA&gt;   
+## # … with 2 more variables: refresh_rate &lt;chr&gt;, last_refreshed &lt;date&gt;
+
+# get all resources for this package
+resources &lt;- list_package_resources(&quot;64b54586-6180-4485-83eb-81e8fae3b8fe&quot;)
+
+# identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
+datastore_resources &lt;- filter(resources, tolower(format) %in% c(&#39;csv&#39;, &#39;geojson&#39;))
+
+# load the first datastore resource as a sample
+COVID19 &lt;- filter(datastore_resources, row_number()==1) %&gt;% get_resource()
+glimpse(COVID19)
+## Rows: 17,872
+## Columns: 18
+## $ `_id`                    &lt;int&gt; 143647, 143648, 143649, 143650, 143651, 1436…
+## $ Assigned_ID              &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1…
+## $ `Outbreak Associated`    &lt;chr&gt; &quot;Sporadic&quot;, &quot;Sporadic&quot;, &quot;Sporadic&quot;, &quot;Sporadi…
+## $ `Age Group`              &lt;chr&gt; &quot;50 to 59 Years&quot;, &quot;50 to 59 Years&quot;, &quot;20 to 2…
+## $ `Neighbourhood Name`     &lt;chr&gt; &quot;Willowdale East&quot;, &quot;Willowdale East&quot;, &quot;Parkw…
+## $ FSA                      &lt;chr&gt; &quot;M2N&quot;, &quot;M2N&quot;, &quot;M3A&quot;, &quot;M4W&quot;, &quot;M4W&quot;, &quot;M2R&quot;, &quot;M…
+## $ `Source of Infection`    &lt;chr&gt; &quot;Travel&quot;, &quot;Travel&quot;, &quot;Travel&quot;, &quot;Travel&quot;, &quot;Tra…
+## $ Classification           &lt;chr&gt; &quot;CONFIRMED&quot;, &quot;CONFIRMED&quot;, &quot;CONFIRMED&quot;, &quot;CONF…
+## $ `Episode Date`           &lt;chr&gt; &quot;2020-01-22&quot;, &quot;2020-01-21&quot;, &quot;2020-02-05&quot;, &quot;2…
+## $ `Reported Date`          &lt;chr&gt; &quot;2020-01-23&quot;, &quot;2020-01-23&quot;, &quot;2020-02-21&quot;, &quot;2…
+## $ `Client Gender`          &lt;chr&gt; &quot;FEMALE&quot;, &quot;MALE&quot;, &quot;FEMALE&quot;, &quot;FEMALE&quot;, &quot;MALE&quot;…
+## $ Outcome                  &lt;chr&gt; &quot;RESOLVED&quot;, &quot;RESOLVED&quot;, &quot;RESOLVED&quot;, &quot;RESOLVE…
+## $ `Currently Hospitalized` &lt;chr&gt; &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;N…
+## $ `Currently in ICU`       &lt;chr&gt; &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;N…
+## $ `Currently Intubated`    &lt;chr&gt; &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;N…
+## $ `Ever Hospitalized`      &lt;chr&gt; &quot;No&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;…
+## $ `Ever in ICU`            &lt;chr&gt; &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;N…
+## $ `Ever Intubated`         &lt;chr&gt; &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;N…
+
+library(tidyverse)
+## ── Attaching packages ────────────────────────────── tidyverse 1.3.0 ──
+## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ stringr 1.4.0
+## ✓ tidyr   1.1.2     ✓ forcats 0.5.0
+## ✓ readr   1.3.1
+## ── Conflicts ───────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+
+Age_Group=COVID19$`Age Group`
+Source_of_Infection=COVID19$`Source of Infection`
+Episode_Date=COVID19$`Episode Date`
+p1 = ggplot(data = COVID19) +
+  geom_bar(aes(x = Age_Group, fill = factor(Source_of_Infection)), position = &quot;fill&quot;)
+p1</code></pre>
+<p><img src="../../../../post/2015-07-23-r-rmarkdown_files/figure-html/cars-1.png" width="672" />
+Young people are more likely to get COVID-19 from close contact, while older people are more likely to be affected by outbreaks.</p>
+</div>
+<div id="picture2-the-proportion-of-factors-in-covid-19-diagnosis-at-different-times." class="section level1">
+<h1>Picture2: The proportion of factors in COVID-19 diagnosis at different times.</h1>
+<p>Travel is the cause of COVID-19 entering Toronto, with significant outbreaks in the medium term, but close contact is the main cause of the continued spread of COVID-19.</p>
+<pre class="r"><code>ggplot(data = COVID19) +
+  geom_bar(aes(x = Episode_Date, fill = factor(Source_of_Infection)), position = &quot;fill&quot;)</code></pre>
+<p><img src="../../../../post/2015-07-23-r-rmarkdown_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="picture2-rates-of-covid-19-diagnosis-at-different-ages-over-time" class="section level1">
+<h1>Picture2: Rates of coVID-19 diagnosis at different ages over time</h1>
+<p>At first, older people are more likely to be infected. Later, the 20-29 years patient has increased significantly, which is suspected to be related to close contact.</p>
+<pre class="r"><code>ggplot(data = COVID19) +
+  geom_bar(aes(x = Episode_Date, fill = factor(Age_Group)), position = &quot;fill&quot;)</code></pre>
+<p><img src="../../../../post/2015-07-23-r-rmarkdown_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="reference" class="section level1">
+<h1>Reference</h1>
+<p><a href="https://open.toronto.ca/dataset/covid-19-cases-in-toronto/" class="uri">https://open.toronto.ca/dataset/covid-19-cases-in-toronto/</a></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="../../../../index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="../../../../images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="../../../../js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,89 @@
+---
+title: "Close contact and Outbreak associated is main cause for Toronto COVID-19 spreat"
+author: "Ying Qu"
+date: 2020-09-27T21:13:14-05:00
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+# Abstruct
+
+# Discribe Data
+This data set contains demographic, geographic, and severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020. This includes cases that are sporadic (occurring in the community) and outbreak-associated. The data are extracted from the provincial communicable disease reporting system (iPHIS) and Toronto's custom COVID-19 case management system (CORES) and combined for reporting. Each line summarizes information for an individual case.
+The data will be completely refreshed and overwritten on a weekly basis. 
+
+
+# Variables used
+
+【Source of Infection】	- The most likely way that sporadic cases acquired their COVID-19 infection. Only the most likely exposure for each case is reported. Exposures that occurred up to 14 days before symptoms start are potential acquisition sources, and can include(
+  #Travel:Travel outside of Ontario.
+  #Close contact with a case: Was in close contact with a confirmed or probable COVID-19 case (e.g., reside in the same household).
+  #Institutional setting: Institutional settings includes, but not limited to: long-term care homes, acute care hospitals…
+  #Healthcare setting: includes, but not limited to: family physician, dentist, ophthalmologist, sports doctor.
+  #Community: Cases with no reported travel outside of Ontario, no known close contact with a COVID-19 case.
+  #Pending Information on source of infection pending.
+  #Unknown/missing Source of infection not identified or missing.
+  #N/A: Outbreak-associated cases.)
+【Episode Date】	- The episode date is a derived variable that best estimates when the disease was acquired, and refers to the earliest available date from: symptom onset (the first day that COVID-19 symptoms occurred), laboratory specimen collection date, or reported date.
+【Client Gender】	-Self-reported gender. 
+
+
+# Picture1: Analysis of Fector for get COVID-19 of different age groups
+
+- Young people are more likely to get COVID-19 from close contact, while older people are more likely to be affected by outbreaks.
+```{r cars}
+library(opendatatoronto)
+library(dplyr)
+
+# get package
+package <- show_package("64b54586-6180-4485-83eb-81e8fae3b8fe")
+package
+
+# get all resources for this package
+resources <- list_package_resources("64b54586-6180-4485-83eb-81e8fae3b8fe")
+
+# identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
+datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'geojson'))
+
+# load the first datastore resource as a sample
+COVID19 <- filter(datastore_resources, row_number()==1) %>% get_resource()
+glimpse(COVID19)
+
+library(tidyverse)
+
+Age_Group=COVID19$`Age Group`
+Source_of_Infection=COVID19$`Source of Infection`
+Episode_Date=COVID19$`Episode Date`
+p1 = ggplot(data = COVID19) +
+  geom_bar(aes(x = Age_Group, fill = factor(Source_of_Infection)), position = "fill")
+p1
+```
+Young people are more likely to get COVID-19 from close contact, while older people are more likely to be affected by outbreaks.
+
+# Picture2: The proportion of factors in COVID-19 diagnosis at different times.
+Travel is the cause of COVID-19 entering Toronto, with significant outbreaks in the medium term, but close contact is the main cause of the continued spread of COVID-19.
+```{r}
+ggplot(data = COVID19) +
+  geom_bar(aes(x = Episode_Date, fill = factor(Source_of_Infection)), position = "fill")
+```
+
+# Picture2: Rates of coVID-19 diagnosis at different ages over time
+At first, older people are more likely to be infected. Later, the 20-29 years patient has increased significantly, which is suspected to be related to close contact.
+
+```{r}
+ggplot(data = COVID19) +
+  geom_bar(aes(x = Episode_Date, fill = factor(Age_Group)), position = "fill")
+
+```
+
+
+# Reference
+https://open.toronto.ca/dataset/covid-19-cases-in-toronto/
+
+

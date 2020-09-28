@@ -77,10 +77,9 @@
 
 <div id="abstruct" class="section level1">
 <h1>Abstruct</h1>
-</div>
-<div id="discribe-data" class="section level1">
-<h1>Discribe Data</h1>
-<p>This data set contains demographic, geographic, and severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020. This includes cases that are sporadic (occurring in the community) and outbreak-associated. The data are extracted from the provincial communicable disease reporting system (iPHIS) and Toronto’s custom COVID-19 case management system (CORES) and combined for reporting. Each line summarizes information for an individual case.
+<p>This analysis is about Toronto COVID-19 infection condition. We can conclude that traveling is the cause of COVID-19 entering Toronto, but outbreaksand close contact is the main cause of the continued spread of COVID-19. Also, young people are more likely to get COVID-19 from close contact, while older people are more likely to be affected by outbreaks.
+# Discribe Data
+This data set contains demographic, geographic, and severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020. This includes cases that are sporadic (occurring in the community) and outbreak-associated. The data are extracted from the provincial communicable disease reporting system (iPHIS) and Toronto’s custom COVID-19 case management system (CORES) and combined for reporting. Each line summarizes information for an individual case.
 The data will be completely refreshed and overwritten on a weekly basis.</p>
 </div>
 <div id="variables-used" class="section level1">
@@ -153,12 +152,12 @@ glimpse(COVID19)
 ## $ `Ever Intubated`         &lt;chr&gt; &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;N…
 
 library(tidyverse)
-## ── Attaching packages ────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ─────────────────────────────── tidyverse 1.3.0 ──
 ## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 ## ✓ tibble  3.0.3     ✓ stringr 1.4.0
 ## ✓ tidyr   1.1.2     ✓ forcats 0.5.0
 ## ✓ readr   1.3.1
-## ── Conflicts ───────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 
@@ -178,8 +177,8 @@ Young people are more likely to get COVID-19 from close contact, while older peo
   geom_bar(aes(x = Episode_Date, fill = factor(Source_of_Infection)), position = &quot;fill&quot;)</code></pre>
 <p><img src="../../../../post/2015-07-23-r-rmarkdown_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 </div>
-<div id="picture2-rates-of-covid-19-diagnosis-at-different-ages-over-time" class="section level1">
-<h1>Picture2: Rates of coVID-19 diagnosis at different ages over time</h1>
+<div id="picture3-rates-of-covid-19-diagnosis-at-different-ages-over-time" class="section level1">
+<h1>Picture3: Rates of coVID-19 diagnosis at different ages over time</h1>
 <p>At first, older people are more likely to be infected. Later, the 20-29 years patient has increased significantly, which is suspected to be related to close contact.</p>
 <pre class="r"><code>ggplot(data = COVID19) +
   geom_bar(aes(x = Episode_Date, fill = factor(Age_Group)), position = &quot;fill&quot;)</code></pre>

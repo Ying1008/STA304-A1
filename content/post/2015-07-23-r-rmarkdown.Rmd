@@ -13,7 +13,7 @@ knitr::opts_chunk$set(collapse = TRUE)
 ```
 
 # Abstruct
-
+This analysis is about Toronto COVID-19 infection condition. We can conclude that traveling is the cause of COVID-19 entering Toronto, but outbreaksand close contact is the main cause of the continued spread of COVID-19. Also, young people are more likely to get COVID-19 from close contact, while older people are more likely to be affected by outbreaks.
 # Discribe Data
 This data set contains demographic, geographic, and severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020. This includes cases that are sporadic (occurring in the community) and outbreak-associated. The data are extracted from the provincial communicable disease reporting system (iPHIS) and Toronto's custom COVID-19 case management system (CORES) and combined for reporting. Each line summarizes information for an individual case.
 The data will be completely refreshed and overwritten on a weekly basis. 
@@ -73,7 +73,7 @@ ggplot(data = COVID19) +
   geom_bar(aes(x = Episode_Date, fill = factor(Source_of_Infection)), position = "fill")
 ```
 
-# Picture2: Rates of coVID-19 diagnosis at different ages over time
+# Picture3: Rates of coVID-19 diagnosis at different ages over time
 At first, older people are more likely to be infected. Later, the 20-29 years patient has increased significantly, which is suspected to be related to close contact.
 
 ```{r}
